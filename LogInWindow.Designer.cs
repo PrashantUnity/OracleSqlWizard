@@ -29,74 +29,110 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogInWindow));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip1.SuspendLayout();
+            this.MainTab = new System.Windows.Forms.TabControl();
+            this.ExportAll = new System.Windows.Forms.TabPage();
+            this.BrowseButton = new System.Windows.Forms.Button();
+            this.ExcelPath = new System.Windows.Forms.TextBox();
+            this.Status = new System.Windows.Forms.TabPage();
+            this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.excelData = new System.Windows.Forms.RichTextBox();
+            this.MainTab.SuspendLayout();
+            this.ExportAll.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // MainTab
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripButton3});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.MainTab.Controls.Add(this.ExportAll);
+            this.MainTab.Controls.Add(this.Status);
+            this.MainTab.Location = new System.Drawing.Point(0, 0);
+            this.MainTab.Margin = new System.Windows.Forms.Padding(0);
+            this.MainTab.Name = "MainTab";
+            this.MainTab.SelectedIndex = 0;
+            this.MainTab.Size = new System.Drawing.Size(1280, 681);
+            this.MainTab.TabIndex = 0;
             // 
-            // toolStripButton1
+            // ExportAll
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.ExportAll.Controls.Add(this.excelData);
+            this.ExportAll.Controls.Add(this.BrowseButton);
+            this.ExportAll.Controls.Add(this.ExcelPath);
+            this.ExportAll.Location = new System.Drawing.Point(4, 24);
+            this.ExportAll.Name = "ExportAll";
+            this.ExportAll.Padding = new System.Windows.Forms.Padding(3);
+            this.ExportAll.Size = new System.Drawing.Size(1272, 653);
+            this.ExportAll.TabIndex = 0;
+            this.ExportAll.Text = "Export Window";
+            this.ExportAll.UseVisualStyleBackColor = true;
             // 
-            // toolStripButton2
+            // BrowseButton
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
+            this.BrowseButton.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.BrowseButton.Location = new System.Drawing.Point(1061, 7);
+            this.BrowseButton.Name = "BrowseButton";
+            this.BrowseButton.Size = new System.Drawing.Size(176, 61);
+            this.BrowseButton.TabIndex = 1;
+            this.BrowseButton.Text = "Browse Excel File";
+            this.BrowseButton.UseVisualStyleBackColor = false;
+            this.BrowseButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
-            // toolStripButton3
+            // ExcelPath
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "toolStripButton3";
+            this.ExcelPath.BackColor = System.Drawing.SystemColors.Info;
+            this.ExcelPath.Location = new System.Drawing.Point(28, 7);
+            this.ExcelPath.Multiline = true;
+            this.ExcelPath.Name = "ExcelPath";
+            this.ExcelPath.ReadOnly = true;
+            this.ExcelPath.Size = new System.Drawing.Size(951, 61);
+            this.ExcelPath.TabIndex = 0;
+            this.ExcelPath.Text = "Path Of Excel File";
+            this.ExcelPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // Status
+            // 
+            this.Status.Location = new System.Drawing.Point(4, 24);
+            this.Status.Name = "Status";
+            this.Status.Padding = new System.Windows.Forms.Padding(3);
+            this.Status.Size = new System.Drawing.Size(1272, 653);
+            this.Status.TabIndex = 1;
+            this.Status.Text = "Status";
+            this.Status.UseVisualStyleBackColor = true;
+            // 
+            // folderBrowser
+            // 
+            this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyDocuments;
+            // 
+            // excelData
+            // 
+            this.excelData.Location = new System.Drawing.Point(28, 100);
+            this.excelData.Name = "excelData";
+            this.excelData.Size = new System.Drawing.Size(1209, 545);
+            this.excelData.TabIndex = 2;
+            this.excelData.Text = "";
             // 
             // LogInWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.toolStrip1);
+            this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.MainTab);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LogInWindow";
             this.Text = "Oracle Wizard";
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.MainTab.ResumeLayout(false);
+            this.ExportAll.ResumeLayout(false);
+            this.ExportAll.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private ToolStrip toolStrip1;
-        private ToolStripButton toolStripButton1;
-        private ToolStripButton toolStripButton2;
-        private ToolStripButton toolStripButton3;
+        private TabControl MainTab;
+        private TabPage ExportAll;
+        private TabPage Status;
+        private Button BrowseButton;
+        private TextBox ExcelPath;
+        private FolderBrowserDialog folderBrowser;
+        private RichTextBox excelData;
     }
 }

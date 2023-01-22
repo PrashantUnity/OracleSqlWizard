@@ -53,7 +53,7 @@ namespace OracleSqlWizard
                         {
                             Console.WriteLine($"Something is Wrong With Excel Data or {e.Message}");
                         }
-
+                        rowCount++;
                     }
                 }
             }
