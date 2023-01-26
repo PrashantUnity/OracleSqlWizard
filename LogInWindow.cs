@@ -1,6 +1,7 @@
 ﻿using ExcelDataReader;
 using Microsoft.Office.Interop.Excel;
 using System.Data;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -13,6 +14,19 @@ namespace OracleSqlWizard
         {
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            this.AllowDrop = true;
+            this.DragEnter += new DragEventHandler(Form1_DragEnter);
+            this.DragDrop += new DragEventHandler(Form1_DragDrop);
+        }
+        void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            ExcelPath.Text = files[0];
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -42,11 +56,12 @@ namespace OracleSqlWizard
                     File.WriteAllText(Directory.GetCurrentDirectory() + $"\\{storeExcelPath}.txt", filePath);
                     //Read the contents of the file into a stream
                     ExcelPath.Text = filePath;
-                    excelData.Text = FillRichTextBox(filePath);
+                    //excelData.Text = FillRichTextBox(filePath);
                 }
             }
 
         }
+
 
         public string FillRichTextBox(string filePath)
         {
@@ -83,6 +98,63 @@ namespace OracleSqlWizard
                 }
             }
             return sb.ToString();
+        }
+
+        private void ExportAll_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ExportLocation_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog folderBrowser = new OpenFileDialog();
+            // Set validate names and check file exists to false otherwise windows will
+            // not let you select "Folder Selection."
+            folderBrowser.ValidateNames = false;
+            folderBrowser.CheckFileExists = false;
+            folderBrowser.CheckPathExists = true;
+            // Always default to Folder Selection.
+            folderBrowser.FileName = "Folder Selection.";
+            if (folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                string folderPath = Path.GetDirectoryName(folderBrowser.FileName);
+                SaveLocation.Text = folderPath;
+            }
+        }
+
+        private void ExportDataBase_Click(object sender, EventArgs e)
+        {
+            var currentPath = Directory.GetCurrentDirectory().ToString() + "log.txt";
+            try
+            {
+                var execute = new Executioner();
+                var file = File.ReadAllLines(currentPath).Length;
+
+                if (ExcelPath.Text.Length > 0) execute.Execute(ExcelPath.Text);
+                else
+                {
+                    string message = "Please Select Xcel File?";
+                    string title = "Invalid Path";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result = MessageBox.Show(message, title, buttons);
+                    if (result == DialogResult.Yes)
+                    {
+                        this.Close();
+                    }
+                }
+            }
+            catch
+            {
+                string message = "Please Select Xcel File?";
+                string title = "Invalid Path";
+                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                DialogResult result = MessageBox.Show(message, title, buttons);
+                if (result == DialogResult.Yes)
+                {
+                    this.Close();
+                }
+            }
+            
         }
     }
 }

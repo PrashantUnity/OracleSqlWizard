@@ -17,10 +17,10 @@ namespace OracleSqlWizard
         readonly List<string> dataBaseName;
         readonly List<string> objectType;
         readonly Dictionary<(string, string), HashSet<string>> storedList;
-        public LogInCrediantials()
+        public LogInCrediantials(string path)
         {
             var dataReader = new ExcelDataReader();
-            var ls = dataReader.GetCrediantials();
+            var ls = dataReader.GetCrediantials(path);
             ownerNames = ls[0];
             userid = ls[1];
             password = ls[2];

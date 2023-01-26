@@ -1,9 +1,4 @@
 ﻿using ExcelDataReader;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OracleSqlWizard
 {
@@ -16,7 +11,6 @@ namespace OracleSqlWizard
         readonly List<string> DataBaseName = new();
         readonly List<string> ObjectType = new();
         readonly Dictionary<(string, string), HashSet<string>> storeObectList = new();
-
         private string DataReader(string filePath)
         {
             long rowCount = 0;
@@ -28,13 +22,15 @@ namespace OracleSqlWizard
                     {
                         try
                         {
-                            Console.WriteLine((reader.GetValue(0)).ToString());
-                            Console.WriteLine((reader.GetValue(0)).ToString());
-                            Console.WriteLine((reader.GetValue(1)).ToString());
-                            Console.WriteLine((reader.GetValue(2)).ToString());
-                            Console.WriteLine((reader.GetValue(3)).ToString());
-                            Console.WriteLine((reader.GetValue(4)).ToString());
-                            Console.WriteLine((reader.GetValue(5)).ToString());
+                            var str = (reader.GetValue(0)).ToString() + "  "+
+                            (reader.GetValue(0)).ToString() +           "  "+
+                            (reader.GetValue(1)).ToString() +           "  "+
+                            (reader.GetValue(2)).ToString() +           "  "+
+                            (reader.GetValue(3)).ToString() +           "  "+
+                            (reader.GetValue(4)).ToString() +           "  "+
+                            (reader.GetValue(5)).ToString() +           "  ";
+                            var currentPath = filePath + "\\log.txt";
+                            File.AppendAllText(currentPath, str);
                             UsedId.Add((reader.GetValue(0)).ToString());
                             Password.Add((reader.GetValue(1)).ToString());
                             Port.Add((reader.GetValue(2)).ToString());
@@ -60,14 +56,12 @@ namespace OracleSqlWizard
             return $"Number Row Counted {rowCount}";
         }
 
-        internal List<List<string>> GetCrediantials()
+        internal List<List<string>> GetCrediantials(string path)
         {
-            var ls = new List<List<string>>();
-            string path = "";
+            var ls = new List<List<string>>(); 
             #region Getting Some Path From User
-            //path = GetDirectories.Path();
+            if(path.Length==0) path = Directory.GetCurrentDirectory();
             #endregion
-            path = @"";
             Console.WriteLine(DataReader(path));
             ls.Add(UsedId);
             ls.Add(UsedId);

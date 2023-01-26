@@ -12,12 +12,12 @@ namespace OracleSqlWizard
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
-        public void Execute()
+        public void Execute(string path)
         {
             int i = 0;
             var visited = new HashSet<(string, string)>();
             #region read login data
-            var login = new LogInCrediantials();
+            var login = new LogInCrediantials(path);
             #endregion
 
             #region connect With server
