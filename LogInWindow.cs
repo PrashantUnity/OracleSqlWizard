@@ -1,15 +1,14 @@
-﻿using ExcelDataReader;
-using Microsoft.Office.Interop.Excel;
-using System.Data;
-using System.IO;
-using System.Text;
-using System.Windows.Forms;
+﻿using ExcelDataReader; 
+using System.Text; 
 
 namespace OracleSqlWizard
 {
     public partial class LogInWindow : Form
     {
         public readonly string storeExcelPath = "storeExcelPath";
+        bool enable = false;
+        bool browse = false;
+        string excelPath = "";
         public LogInWindow()
         {
             InitializeComponent();
@@ -27,6 +26,8 @@ namespace OracleSqlWizard
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             ExcelPath.Text = files[0];
+            excelPath = files[0];
+            ConstantsClass.ExcelFilePath = excelPath;
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -36,7 +37,7 @@ namespace OracleSqlWizard
 
         private void BrowseButton_Click(object sender, EventArgs e)
         {
-
+            browse = true;
             var fileContent = string.Empty;
             var filePath = string.Empty;
 
@@ -48,18 +49,14 @@ namespace OracleSqlWizard
                 openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    //Get the path of specified file
-                    filePath = openFileDialog.FileName;
-                    //File.Create(Directory.GetCurrentDirectory()+ $"\\{storeExcelPath}.txt");
-
-                    File.WriteAllText(Directory.GetCurrentDirectory() + $"\\{storeExcelPath}.txt", filePath);
-                    //Read the contents of the file into a stream
+                { 
+                    filePath = openFileDialog.FileName; 
                     ExcelPath.Text = filePath;
-                    //excelData.Text = FillRichTextBox(filePath);
+                    excelPath = filePath;
+                    ConstantsClass.ExcelFilePath = filePath; 
                 }
             }
-
+            EnableButton();
         }
 
 
@@ -107,9 +104,7 @@ namespace OracleSqlWizard
 
         private void ExportLocation_Click(object sender, EventArgs e)
         {
-            OpenFileDialog folderBrowser = new OpenFileDialog();
-            // Set validate names and check file exists to false otherwise windows will
-            // not let you select "Folder Selection."
+            OpenFileDialog folderBrowser = new OpenFileDialog(); 
             folderBrowser.ValidateNames = false;
             folderBrowser.CheckFileExists = false;
             folderBrowser.CheckPathExists = true;
@@ -119,28 +114,34 @@ namespace OracleSqlWizard
             {
                 string folderPath = Path.GetDirectoryName(folderBrowser.FileName);
                 SaveLocation.Text = folderPath;
+                ConstantsClass.SaveFileLocation = folderPath;
+            }
+            enable = true;
+            EnableButton();
+        }
+        private void EnableButton()
+        {
+            if(enable && browse) 
+            {
+                ConstantsClass.EnableExecuteButton = true;
+                ExportDataBase.Enabled = true;
             }
         }
 
         private void ExportDataBase_Click(object sender, EventArgs e)
         {
-            var currentPath = Directory.GetCurrentDirectory().ToString() + "log.txt";
+            LogsData.Text = "";
             try
             {
                 var execute = new Executioner();
-                var file = File.ReadAllLines(currentPath).Length;
-
-                if (ExcelPath.Text.Length > 0) execute.Execute(ExcelPath.Text);
-                else
+                execute.Execute(ConstantsClass.ExcelFilePath);
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = ConstantsClass.TotalLine;
+                while (true)
                 {
-                    string message = "Please Select Xcel File?";
-                    string title = "Invalid Path";
-                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                    DialogResult result = MessageBox.Show(message, title, buttons);
-                    if (result == DialogResult.Yes)
-                    {
-                        this.Close();
-                    }
+                    progressBar1.Value = ConstantsClass.ReadedLine;
+                    LogsData.Text += "\n" + execute.currentMessage;
+                    Thread.Sleep(3000);
                 }
             }
             catch

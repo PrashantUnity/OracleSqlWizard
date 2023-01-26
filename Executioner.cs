@@ -8,13 +8,15 @@ namespace OracleSqlWizard
 {
     internal class Executioner
     {
+        public int i = 0,count =100;
+        public string currentMessage = string.Empty;
         public Executioner()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
         public void Execute(string path)
         {
-            int i = 0;
+            i = 0;
             var visited = new HashSet<(string, string)>();
             #region read login data
             var login = new LogInCrediantials(path);
@@ -22,9 +24,11 @@ namespace OracleSqlWizard
 
             #region connect With server
             var connection = new Connection();
-            var count = login.Count();
+            count = login.Count();
+            ConstantsClass.TotalLine = count;
             while (++i < count)
             {
+                ConstantsClass.ReadedLine = i;
                 var ownerName = login.OwnerName(i);
                 var userId = login.UserId(i);
                 var password = login.PassWord(i);
@@ -32,12 +36,12 @@ namespace OracleSqlWizard
                 var localHost = login.LocalHost(i);
                 var dataBaseName = login.DataBaseName(i);
                 var objectType = login.ObjectType(i);
-                var storesList = login.GetObjectList(i);
-
+                var storesList = login.GetObjectList(i); 
                 var isVisited = (userId, objectType);
                 if (!visited.Contains((isVisited)))
                 {
-                    //connection.Connect(userId, password, port, localHost, dataBaseName, objectType, storesList);
+                    ConstantsClass.LogText += $"\n Logging with Owner {ownerName} with User Id : {userId}";
+                    connection.Connect(userId, password, port, localHost, dataBaseName, objectType, storesList);
                     visited.Add(isVisited);
                 }
             }

@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogInWindow));
             this.MainTab = new System.Windows.Forms.TabControl();
             this.ExportAll = new System.Windows.Forms.TabPage();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.ExportDataBase = new System.Windows.Forms.Button();
             this.SaveLocation = new System.Windows.Forms.TextBox();
             this.ExportLocation = new System.Windows.Forms.Button();
@@ -39,7 +40,6 @@
             this.LogsDatas = new System.Windows.Forms.TabPage();
             this.LogsData = new System.Windows.Forms.RichTextBox();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.MainTab.SuspendLayout();
             this.ExportAll.SuspendLayout();
             this.LogsDatas.SuspendLayout();
@@ -76,8 +76,16 @@
             this.ExportAll.Text = "Export Window";
             this.ExportAll.Click += new System.EventHandler(this.ExportAll_Click);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(28, 187);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(329, 38);
+            this.progressBar1.TabIndex = 5;
+            // 
             // ExportDataBase
             // 
+            this.ExportDataBase.Enabled = false;
             this.ExportDataBase.Location = new System.Drawing.Point(375, 187);
             this.ExportDataBase.Name = "ExportDataBase";
             this.ExportDataBase.Size = new System.Drawing.Size(155, 38);
@@ -153,13 +161,6 @@
             // folderBrowser
             // 
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyDocuments;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(28, 187);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(329, 38);
-            this.progressBar1.TabIndex = 5;
             // 
             // LogInWindow
             // 

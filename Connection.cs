@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace OracleSqlWizard
         public void Connect(string userId, string password, string port, string databaseUrl, string databaseName, string objectType, HashSet<string> objectNameList)
         {
             OracleConnection con = new();
-
+            ConstantsClass.LogText += $"\n Logging Started for {userId}";
             // create connection string using builder
             OracleConnectionStringBuilder ocsb = new()
             {
@@ -22,10 +23,10 @@ namespace OracleSqlWizard
                 DataSource = $"{databaseUrl}:{port}/{databaseName}"
             };
 
-            // connect
             con.ConnectionString = ocsb.ConnectionString;
             Console.WriteLine(con.ConnectionTimeout);
             con.Open();
+            ConstantsClass.LogText += $"\n Logged in with {userId}";
             OracleCommand orclCmd = con.CreateCommand();
             orclCmd.CommandTimeout = 1000000;
 
@@ -40,46 +41,25 @@ namespace OracleSqlWizard
                 while (rdr.Read())
                 {
                     CreateSqlFile(path, rdr.GetString(0), userId, objectType, objectName);
-                    //Console.WriteLine( GetSchema.SchemaReader(rdr));
-                    //break;
                 }
                 rdr.Close();
-
             }
-
-            //File.WriteAllLines(TempJobPath, allNames);
-            //var ls = rdr.GetColumnSchema().Select(x => x);
-            //var schema = rdr.GetColumnSchema().Select(x => new SchemaPractice(x));
-
-            //foreach (var item in ls)
-            //{
-            //    Console.WriteLine(item);
-            //}
-            // close connection
-            //DataTable schema = rdr.GetSchemaTable();
-            //try
-            //{
-
-            //    //File.WriteAllText(temp,OracleSqlCreater.GetCreateTableSql(schema));
-            //}
-            //catch (Exception)
-            //{
-            //}
             orclCmd.Dispose();
             con.Close();
-            Console.WriteLine("Program Finished");
+            ConstantsClass.LogText += $"\n Logging Out {userId}";
         }
         public void CreateSqlFile(string path, string queryString, string owner, string objectType, string objectName)
         {
-            // ..Downloads\OracleJobsFromServel\OracleJob\SqlTest.txt
             path = Directory.CreateDirectory(path).ToString();
             path += $"\\{owner}";
             path = Directory.CreateDirectory(path).ToString();
             path += $"\\{objectType}";
             path = Directory.CreateDirectory(path).ToString();
-            path += $"{objectName}.sql";
+            path += $"\\{objectName}.sql";
+            ConstantsClass.LogText += $"\n  creating Path {path}";
             File.Create(path).Close();
-            File.AppendAllText(path, queryString);
+            File.WriteAllTextAsync(path, queryString);
+            ConstantsClass.LogText += $"\n writing query in {objectName}.sql File";
         }
     }
 }

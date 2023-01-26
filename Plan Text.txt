@@ -4,3 +4,9 @@
 Executioner Calling/ creating Object of this File;
 
 		Pass excel path to the function
+
+
+
+		Now Attempting to Read From Constat Class;
+
+		where ever log text is updated call an event / delegate

@@ -1,4 +1,5 @@
 ﻿using ExcelDataReader;
+using System.IO;
 
 namespace OracleSqlWizard
 {
@@ -14,6 +15,7 @@ namespace OracleSqlWizard
         private string DataReader(string filePath)
         {
             long rowCount = 0;
+            
             using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
@@ -29,8 +31,10 @@ namespace OracleSqlWizard
                             (reader.GetValue(3)).ToString() +           "  "+
                             (reader.GetValue(4)).ToString() +           "  "+
                             (reader.GetValue(5)).ToString() +           "  ";
-                            var currentPath = filePath + "\\log.txt";
-                            File.AppendAllText(currentPath, str);
+
+                            ConstantsClass.LogText += $"\n Reading row {rowCount} {str}";
+                            // call deligate;
+
                             UsedId.Add((reader.GetValue(0)).ToString());
                             Password.Add((reader.GetValue(1)).ToString());
                             Port.Add((reader.GetValue(2)).ToString());
@@ -47,7 +51,7 @@ namespace OracleSqlWizard
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine($"Something is Wrong With Excel Data or {e.Message}");
+                            ConstantsClass.LogText += $"\n Something is Wrong With Excel Data or {e.Message}";
                         }
                         rowCount++;
                     }
@@ -58,11 +62,12 @@ namespace OracleSqlWizard
 
         internal List<List<string>> GetCrediantials(string path)
         {
-            var ls = new List<List<string>>(); 
+            
+            var ls = new List<List<string>>();
             #region Getting Some Path From User
-            if(path.Length==0) path = Directory.GetCurrentDirectory();
+            ConstantsClass.LogText += $"\n Reading From Excel File{DateTime.Now.ToShortTimeString()}";
             #endregion
-            Console.WriteLine(DataReader(path));
+            ConstantsClass.LogText += $"\n {DataReader(path)}";
             ls.Add(UsedId);
             ls.Add(UsedId);
             ls.Add(Password);
@@ -70,6 +75,7 @@ namespace OracleSqlWizard
             ls.Add(LocalHost);
             ls.Add(DataBaseName);
             ls.Add(ObjectType);
+            ConstantsClass.LogText += "\n Data Reded from Excel";
             return ls;
         }
         internal Dictionary<(string, string), HashSet<string>> StoredObectList()
