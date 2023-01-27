@@ -61,7 +61,7 @@
     <value>Step 1 : Browse Excel File
 Step 2 : Browse Back Up Location
 
-Make Sure Excel is in this Format
+Make Sure Excel is in this Format below
 
 
 UserId	Password	Port	       Local Host	               DataBaseName     Object	Object Name
@@ -80,11 +80,11 @@ userid	Welcome$3m36	54641547       localhost.corp.pvt	databaseName	table	name
 userid	Welcome$3m37	54641548       localhost.corp.pvt	databaseName	table	name
 
 
-Step 3 : Click on export 
+Step 3 : Click on export and wait  for the progress bar to Finish
 
 You can view Activity in log tab
 
-Waith for the progrss bar to Finish</value>
+</value>
   </data>
   <metadata name="folderBrowser.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
