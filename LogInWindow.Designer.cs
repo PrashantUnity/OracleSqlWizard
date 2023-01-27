@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogInWindow));
             this.MainTab = new System.Windows.Forms.TabControl();
             this.ExportAll = new System.Windows.Forms.TabPage();
@@ -40,6 +41,7 @@
             this.LogsDatas = new System.Windows.Forms.TabPage();
             this.LogsData = new System.Windows.Forms.RichTextBox();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.MainTab.SuspendLayout();
             this.ExportAll.SuspendLayout();
             this.LogsDatas.SuspendLayout();
@@ -162,6 +164,11 @@
             // 
             this.folderBrowser.RootFolder = System.Environment.SpecialFolder.MyDocuments;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // LogInWindow
             // 
             this.AllowDrop = true;
@@ -198,5 +205,6 @@
         private TextBox SaveLocation;
         private Button ExportLocation;
         private ProgressBar progressBar1;
+        public System.Windows.Forms.Timer timer1;
     }
 }

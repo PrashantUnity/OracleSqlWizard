@@ -59,7 +59,7 @@ namespace OracleSqlWizard
             ConstantsClass.LogText += $"\n  creating Path {path}";
             File.Create(path).Close();
             File.WriteAllTextAsync(path, queryString);
-            ConstantsClass.LogText += $"\n writing query in {objectName}.sql File";
+            ConstantsClass.LogText += $"\n writing query in {objectName}.sql File at location {path}";
         }
     }
 }

@@ -29,7 +29,7 @@ namespace OracleSqlWizard
             dataBaseName = ls[5];
             objectType = ls[6];
             storedList = dataReader.StoredObectList();
-            count = ls[0].Count();
+            count =ls[0].Count;
         }
         /// <summary>
         /// Give Index I will Give You OwnerName

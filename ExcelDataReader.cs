@@ -24,17 +24,6 @@ namespace OracleSqlWizard
                     {
                         try
                         {
-                            var str = (reader.GetValue(0)).ToString() + "  "+
-                            (reader.GetValue(0)).ToString() +           "  "+
-                            (reader.GetValue(1)).ToString() +           "  "+
-                            (reader.GetValue(2)).ToString() +           "  "+
-                            (reader.GetValue(3)).ToString() +           "  "+
-                            (reader.GetValue(4)).ToString() +           "  "+
-                            (reader.GetValue(5)).ToString() +           "  ";
-
-                            ConstantsClass.LogText += $"\n Reading row {rowCount} {str}";
-                            // call deligate;
-
                             UsedId.Add((reader.GetValue(0)).ToString());
                             Password.Add((reader.GetValue(1)).ToString());
                             Port.Add((reader.GetValue(2)).ToString());
@@ -52,6 +41,13 @@ namespace OracleSqlWizard
                         catch (Exception e)
                         {
                             ConstantsClass.LogText += $"\n Something is Wrong With Excel Data or {e.Message}";
+                            string message = $"\n Something is Wrong With Excel Data or {e.Message}";
+                            string title = "Invalid Excel Data";
+                            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                            DialogResult result = MessageBox.Show(message, title, buttons);
+                            if (result == DialogResult.Yes)
+                            {
+                            }
                         }
                         rowCount++;
                     }
@@ -75,7 +71,7 @@ namespace OracleSqlWizard
             ls.Add(LocalHost);
             ls.Add(DataBaseName);
             ls.Add(ObjectType);
-            ConstantsClass.LogText += "\n Data Reded from Excel";
+            ConstantsClass.LogText += "\n Data Readed from Excel";
             return ls;
         }
         internal Dictionary<(string, string), HashSet<string>> StoredObectList()

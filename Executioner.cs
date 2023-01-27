@@ -28,7 +28,7 @@ namespace OracleSqlWizard
             ConstantsClass.TotalLine = count;
             while (++i < count)
             {
-                ConstantsClass.ReadedLine = i;
+                ConstantsClass.ReadingLine = i;
                 var ownerName = login.OwnerName(i);
                 var userId = login.UserId(i);
                 var password = login.PassWord(i);
@@ -45,6 +45,7 @@ namespace OracleSqlWizard
                     visited.Add(isVisited);
                 }
             }
+            ConstantsClass.ReadingLine = i;
             #endregion
 
             #region Write Data to Excel Sheet

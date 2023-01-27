@@ -1,5 +1,6 @@
 ﻿using ExcelDataReader; 
-using System.Text; 
+using System.Text;
+using System.Threading;
 
 namespace OracleSqlWizard
 {
@@ -16,10 +17,12 @@ namespace OracleSqlWizard
             this.AllowDrop = true;
             this.DragEnter += new DragEventHandler(Form1_DragEnter);
             this.DragDrop += new DragEventHandler(Form1_DragDrop);
+            timer1.Enabled = false;
         }
         void Form1_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+            timer1.Enabled = false;
         }
 
         void Form1_DragDrop(object sender, DragEventArgs e)
@@ -28,19 +31,16 @@ namespace OracleSqlWizard
             ExcelPath.Text = files[0];
             excelPath = files[0];
             ConstantsClass.ExcelFilePath = excelPath;
+            timer1.Enabled = false;
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             browse = true;
-            var fileContent = string.Empty;
-            var filePath = string.Empty;
-
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
@@ -49,8 +49,8 @@ namespace OracleSqlWizard
                 openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
-                { 
-                    filePath = openFileDialog.FileName; 
+                {
+                    string? filePath = openFileDialog.FileName;
                     ExcelPath.Text = filePath;
                     excelPath = filePath;
                     ConstantsClass.ExcelFilePath = filePath; 
@@ -125,10 +125,11 @@ namespace OracleSqlWizard
             {
                 ConstantsClass.EnableExecuteButton = true;
                 ExportDataBase.Enabled = true;
+                timer1.Enabled = true;
             }
         }
 
-        private void ExportDataBase_Click(object sender, EventArgs e)
+        private async void ExportDataBase_Click(object sender, EventArgs e)
         {
             LogsData.Text = "";
             try
@@ -137,12 +138,7 @@ namespace OracleSqlWizard
                 execute.Execute(ConstantsClass.ExcelFilePath);
                 progressBar1.Minimum = 0;
                 progressBar1.Maximum = ConstantsClass.TotalLine;
-                while (true)
-                {
-                    progressBar1.Value = ConstantsClass.ReadedLine;
-                    LogsData.Text += "\n" + execute.currentMessage;
-                    Thread.Sleep(3000);
-                }
+                timer1.Enabled = true;
             }
             catch
             {
@@ -156,6 +152,19 @@ namespace OracleSqlWizard
                 }
             }
             
+        }
+
+        private void  timer1_Tick(object sender, EventArgs e)
+        {
+            progressBar1.Value = ConstantsClass.ReadingLine;
+            
+            LogsData.Text = "\n" + ConstantsClass.LogText ;
+            Sleep();
+        }
+
+        private async void  Sleep()
+        {
+            await Task.Run(() => Thread.Sleep(3000));
         }
     }
 }

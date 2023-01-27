@@ -11,7 +11,7 @@ namespace OracleSqlWizard
         public static string ExcelFilePath { get; set; }
         public static string LogText { get; set; }
         public static string SaveFileLocation{ get; set; }
-        public static int ReadedLine { get; set; }
+        public static int ReadingLine { get; set; }
         public static int TotalLine { get; set; }
         public static bool EnableExecuteButton { get; internal set; }
     }
