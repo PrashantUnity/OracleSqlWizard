@@ -142,8 +142,8 @@ namespace OracleSqlWizard
             }
             catch
             {
-                string message = "Please Select Xcel File?";
-                string title = "Invalid Path";
+                string message = "Some thing went Wrong";
+                string title = "Failed";
                 MessageBoxButtons buttons = MessageBoxButtons.YesNo;
                 DialogResult result = MessageBox.Show(message, title, buttons);
                 if (result == DialogResult.Yes)

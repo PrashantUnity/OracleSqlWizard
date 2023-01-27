@@ -40,7 +40,7 @@ namespace OracleSqlWizard
                 var rdr = orclCmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    CreateSqlFile(path, rdr.GetString(0), userId, objectType, objectName);
+                    CreateSqlFile( rdr.GetString(0), userId, objectType, objectName);
                 }
                 rdr.Close();
             }
@@ -48,9 +48,9 @@ namespace OracleSqlWizard
             con.Close();
             ConstantsClass.LogText += $"\n Logging Out {userId}";
         }
-        public void CreateSqlFile(string path, string queryString, string owner, string objectType, string objectName)
+        public void CreateSqlFile(string queryString, string owner, string objectType, string objectName)
         {
-            path = Directory.CreateDirectory(path).ToString();
+            var path = ConstantsClass.SaveFileLocation;
             path += $"\\{owner}";
             path = Directory.CreateDirectory(path).ToString();
             path += $"\\{objectType}";

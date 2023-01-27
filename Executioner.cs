@@ -46,6 +46,7 @@ namespace OracleSqlWizard
                 }
             }
             ConstantsClass.ReadingLine = i;
+            ConstantsClass.LogText += "\n Program Finished";
             #endregion
 
             #region Write Data to Excel Sheet

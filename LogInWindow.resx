@@ -57,6 +57,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>Step 1 : Browse Excel File
+Step 2 : Browse Back Up Location
+
+Make Sure Excel is in this Format
+
+
+UserId	Password	Port	       Local Host	               DataBaseName     Object	Object Name
+userid	Welcome$3m25	54641536       localhost.corp.pvt	databaseName	VIEW	name
+userid	Welcome$3m26	54641537       localhost.corp.pvt	databaseName	VIEW	name
+userid	Welcome$3m27	54641538       localhost.corp.pvt	databaseName	VIEW	name
+userid	Welcome$3m28	54641539       localhost.corp.pvt	databaseName	VIEW	name
+userid	Welcome$3m29	54641540       localhost.corp.pvt	databaseName	VIEW	name
+userid	Welcome$3m30	54641541       localhost.corp.pvt	databaseName	table	name
+userid	Welcome$3m31	54641542       localhost.corp.pvt	databaseName	table	name
+userid	Welcome$3m32	54641543       localhost.corp.pvt	databaseName	table	name
+userid	Welcome$3m33	54641544       localhost.corp.pvt	databaseName	table	name
+userid	Welcome$3m34	54641545       localhost.corp.pvt	databaseName	table	name
+userid	Welcome$3m35	54641546       localhost.corp.pvt	databaseName	table	name
+userid	Welcome$3m36	54641547       localhost.corp.pvt	databaseName	table	name
+userid	Welcome$3m37	54641548       localhost.corp.pvt	databaseName	table	name
+
+
+Step 3 : Click on export 
+
+You can view Activity in log tab
+
+Waith for the progrss bar to Finish</value>
+  </data>
   <metadata name="folderBrowser.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
