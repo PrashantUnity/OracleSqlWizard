@@ -41,7 +41,7 @@ namespace OracleSqlWizard
                 if (!visited.Contains((isVisited)))
                 {
                     ConstantsClass.LogText += $"\n Logging with Owner {ownerName} with User Id : {userId}";
-                    connection.Connect(userId, password, port, localHost, dataBaseName, objectType, storesList);
+                    connection.Connect(ownerName,userId, password, port, localHost, dataBaseName, objectType, storesList);
                     visited.Add(isVisited);
                 }
             }

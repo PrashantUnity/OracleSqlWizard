@@ -1,5 +1,4 @@
-﻿using ExcelDataReader;
-using System.IO;
+﻿using ExcelDataReader; 
 
 namespace OracleSqlWizard
 {
@@ -7,9 +6,10 @@ namespace OracleSqlWizard
     {
         readonly List<string> UsedId = new();
         readonly List<string> Password = new();
-        readonly List<string> Port = new();
         readonly List<string> LocalHost = new();
+        readonly List<string> Port = new();
         readonly List<string> DataBaseName = new();
+        readonly List<string> OwnerName = new();
         readonly List<string> ObjectType = new();
         readonly Dictionary<(string, string), HashSet<string>> storeObectList = new();
         private string DataReader(string filePath)
@@ -26,17 +26,18 @@ namespace OracleSqlWizard
                         {
                             UsedId.Add((reader.GetValue(0)).ToString());
                             Password.Add((reader.GetValue(1)).ToString());
-                            Port.Add((reader.GetValue(2)).ToString());
-                            LocalHost.Add((reader.GetValue(3)).ToString());
+                            LocalHost.Add((reader.GetValue(2)).ToString());
+                            Port.Add((reader.GetValue(3)).ToString());
                             DataBaseName.Add((reader.GetValue(4)).ToString());
-                            ObjectType.Add($"'{(reader.GetValue(5)).ToString()}'");
+                            OwnerName.Add((reader.GetValue(5)).ToString()); 
+                            ObjectType.Add($"'{(reader.GetValue(6)).ToString()}'");
 
-                            var tuple = (((reader.GetValue(0)).ToString()).ToUpper(), $"'{((reader.GetValue(5))).ToString().ToUpper()}'");
+                            var tuple = ((UsedId[UsedId.Count-1] + OwnerName[OwnerName.Count-1]).ToUpper(), $"'{ObjectType[ObjectType.Count - 1].ToUpper()}'");
                             if (!storeObectList.ContainsKey(tuple))
                             {
                                 storeObectList.Add((tuple), new HashSet<string>());
                             }
-                            storeObectList[tuple].Add($"'{((reader.GetValue(6))).ToString().ToUpper()}'");
+                            storeObectList[tuple].Add($"'{((reader.GetValue(7))).ToString().ToUpper()}'");
                         }
                         catch (Exception e)
                         {
@@ -61,16 +62,24 @@ namespace OracleSqlWizard
             
             var ls = new List<List<string>>();
             #region Getting Some Path From User
-            ConstantsClass.LogText += $"\n Reading From Excel File{DateTime.Now.ToShortTimeString()}";
+            ConstantsClass.LogText += $"\n Reading From Excel File{DateTime.Now}";
             #endregion
             ConstantsClass.LogText += $"\n {DataReader(path)}";
+            ConstantsClass.IndexOfUsedId = 0;
             ls.Add(UsedId);
-            ls.Add(UsedId);
+            ConstantsClass.IndexOfPassword = 1;
             ls.Add(Password);
-            ls.Add(Port);
+            ConstantsClass.IndexOfLocalHost = 2;
             ls.Add(LocalHost);
+            ConstantsClass.IndexOfPort = 3;
+            ls.Add(Port);
+            ConstantsClass.IndexOfDataBaseName = 4;
             ls.Add(DataBaseName);
+            ConstantsClass.IndexOfOwnerName = 5;
+            ls.Add(OwnerName);
+            ConstantsClass.IndexOfObjectType = 6;
             ls.Add(ObjectType);
+
             ConstantsClass.LogText += "\n Data Readed from Excel";
             return ls;
         }

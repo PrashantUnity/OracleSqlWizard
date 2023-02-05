@@ -1,6 +1,5 @@
-﻿using ExcelDataReader; 
+﻿using ExcelDataReader;
 using System.Text;
-using System.Threading;
 
 namespace OracleSqlWizard
 {
@@ -14,10 +13,13 @@ namespace OracleSqlWizard
         {
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            this.AllowDrop = true;
-            this.DragEnter += new DragEventHandler(Form1_DragEnter);
-            this.DragDrop += new DragEventHandler(Form1_DragDrop);
+            AllowDrop = true;
+            DragEnter += new DragEventHandler(Form1_DragEnter);
+            DragDrop += new DragEventHandler(Form1_DragDrop);
             timer1.Enabled = false;
+            MaximizeBox = false;
+            ExportDataBase.BackColor = Color.White;
+
         }
         void Form1_DragEnter(object sender, DragEventArgs e)
         {
@@ -40,7 +42,7 @@ namespace OracleSqlWizard
 
         private void BrowseButton_Click(object sender, EventArgs e)
         {
-            browse = true;
+
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
@@ -53,7 +55,9 @@ namespace OracleSqlWizard
                     string? filePath = openFileDialog.FileName;
                     ExcelPath.Text = filePath;
                     excelPath = filePath;
-                    ConstantsClass.ExcelFilePath = filePath; 
+                    ConstantsClass.ExcelFilePath = filePath;
+                    browse = true;
+                    BrowseButton.BackColor = Color.Green;
                 }
             }
             EnableButton();
@@ -104,7 +108,7 @@ namespace OracleSqlWizard
 
         private void ExportLocation_Click(object sender, EventArgs e)
         {
-            OpenFileDialog folderBrowser = new OpenFileDialog(); 
+            OpenFileDialog folderBrowser = new OpenFileDialog();
             folderBrowser.ValidateNames = false;
             folderBrowser.CheckFileExists = false;
             folderBrowser.CheckPathExists = true;
@@ -115,17 +119,20 @@ namespace OracleSqlWizard
                 string folderPath = Path.GetDirectoryName(folderBrowser.FileName);
                 SaveLocation.Text = folderPath;
                 ConstantsClass.SaveFileLocation = folderPath;
+                enable = true;
+                ExportLocation.BackColor = Color.Green;
             }
-            enable = true;
+
             EnableButton();
         }
         private void EnableButton()
         {
-            if(enable && browse) 
+            if (enable && browse)
             {
                 ConstantsClass.EnableExecuteButton = true;
                 ExportDataBase.Enabled = true;
                 timer1.Enabled = true;
+                ExportDataBase.BackColor = Color.Green;
             }
         }
 
@@ -139,6 +146,7 @@ namespace OracleSqlWizard
                 progressBar1.Minimum = 0;
                 progressBar1.Maximum = ConstantsClass.TotalLine;
                 timer1.Enabled = true;
+                ExportDataBase.BackColor = Color.Red;
             }
             catch
             {
@@ -148,21 +156,24 @@ namespace OracleSqlWizard
                 DialogResult result = MessageBox.Show(message, title, buttons);
                 if (result == DialogResult.Yes)
                 {
-                    this.Close();
+                    Close();
                 }
             }
-            
+
         }
 
-        private void  timer1_Tick(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
             progressBar1.Value = ConstantsClass.ReadingLine;
-            
-            LogsData.Text = "\n" + ConstantsClass.LogText ;
+            if (ConstantsClass.TotalLine == ConstantsClass.ReadingLine)
+            {
+                ExportDataBase.BackColor = Color.YellowGreen;
+            }
+            LogsData.Text = "\n" + ConstantsClass.LogText;
             Sleep();
         }
 
-        private async void  Sleep()
+        private async void Sleep()
         {
             await Task.Run(() => Thread.Sleep(3000));
         }

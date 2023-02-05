@@ -1,12 +1,19 @@
-﻿
+﻿Step 1 : Locate/Browse Excel File
+Step 2 : Browse Back Up Location
+
+Make Sure Excel is in this Format below
 
 
-Executioner Calling/ creating Object of this File;
+UserId	Password	    Local Host	        Port        DataBaseName  OwnerName         Object	   Object Name
+userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	VIEW	   name
+userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	VIEW	   name
+userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	VIEW	   name
+userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	VIEW	   name
+userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	VIEW	   name
+userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	table	   name
+userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	table	   name
+userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	table	   name
 
-		Pass excel path to the function
+Step 3 : Click on export and wait  for the progress bar to Finish
 
-
-
-		Now Attempting to Read From Constat Class;
-
-		where ever log text is updated call an event / delegate
+You can view Activity in log tab
