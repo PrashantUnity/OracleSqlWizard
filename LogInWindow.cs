@@ -1,4 +1,5 @@
 ﻿using ExcelDataReader;
+using System.ComponentModel;
 using System.Text;
 
 namespace OracleSqlWizard
@@ -8,7 +9,8 @@ namespace OracleSqlWizard
         public readonly string storeExcelPath = "storeExcelPath";
         bool enable = false;
         bool browse = false;
-        string excelPath = "";
+        string excelPath = ""; 
+
         public LogInWindow()
         {
             InitializeComponent();
@@ -19,7 +21,8 @@ namespace OracleSqlWizard
             timer1.Enabled = false;
             MaximizeBox = false;
             ExportDataBase.BackColor = Color.White;
-
+            button1.Enabled = false;
+            ExportDataBase.Enabled = false;
         }
         void Form1_DragEnter(object sender, DragEventArgs e)
         {
@@ -45,10 +48,10 @@ namespace OracleSqlWizard
 
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "c:\\";
+                //openFileDialog.InitialDirectory = "c:\\";
                 openFileDialog.Filter = "Excel Worksheets 2003(*.xls)|*.xls|Excel Worksheets 2007(*.xlsx)|*.xlsx";
                 openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
+                
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -61,44 +64,6 @@ namespace OracleSqlWizard
                 }
             }
             EnableButton();
-        }
-
-
-        public string FillRichTextBox(string filePath)
-        {
-            var sb = new StringBuilder();
-
-            long rowCount = 0;
-            using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
-            {
-                using (var reader = ExcelReaderFactory.CreateReader(stream))
-                {
-                    while (reader.Read())
-                    {
-                        try
-                        {
-
-                            sb.Append(string.Format(
-                                "{0,-15} {1,-15} {2,-15} {3,-15}{4,-15}{5,-15}{6,-15}\n\n",
-                                (reader.GetValue(0)).ToString().Trim() + "\t",
-                                (reader.GetValue(1)).ToString().Trim() + "\t",
-                                (reader.GetValue(2)).ToString().Trim() + "\t",
-                                (reader.GetValue(3)).ToString().Trim() + "\t",
-                                (reader.GetValue(4)).ToString().Trim() + "\t",
-                                $"'{(reader.GetValue(5)).ToString().Trim()}'" + "\t",
-                                 (reader.GetValue(6)).ToString().Trim() + "\t"
-                            ));
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"Something is Wrong With Excel Data or {e.Message}");
-                        }
-                        rowCount++;
-                    }
-                    sb.Append("\n");
-                }
-            }
-            return sb.ToString();
         }
 
         private void ExportAll_Click(object sender, EventArgs e)
@@ -138,44 +103,65 @@ namespace OracleSqlWizard
 
         private async void ExportDataBase_Click(object sender, EventArgs e)
         {
-            LogsData.Text = "";
-            try
-            {
-                var execute = new Executioner();
-                execute.Execute(ConstantsClass.ExcelFilePath);
-                progressBar1.Minimum = 0;
-                progressBar1.Maximum = ConstantsClass.TotalLine;
-                timer1.Enabled = true;
-                ExportDataBase.BackColor = Color.Red;
-            }
-            catch
-            {
-                string message = "Some thing went Wrong";
-                string title = "Failed";
-                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                DialogResult result = MessageBox.Show(message, title, buttons);
-                if (result == DialogResult.Yes)
-                {
-                    Close();
-                }
-            }
-
-        }
-
+            ConstantsClass.IsCancelled = false;
+            timer1.Enabled = true;
+            await Task.Factory.StartNew(() => Doing()); 
+            ExportDataBase.Enabled = false;
+        }   
         private void timer1_Tick(object sender, EventArgs e)
         {
             progressBar1.Value = ConstantsClass.ReadingLine;
             if (ConstantsClass.TotalLine == ConstantsClass.ReadingLine)
             {
-                ExportDataBase.BackColor = Color.YellowGreen;
+                ExportDataBase.BackColor = Color.Green;
+                ExportDataBase.Enabled = true;
+                timer1.Enabled = false;
+                button1.Enabled =false;
+                var fileLocation = ConstantsClass.SaveFileLocation + "\\LogsFiles";
+                fileLocation = Directory.CreateDirectory(fileLocation).ToString();
+                fileLocation += "\\Log.txt";
+                if (!File.Exists(fileLocation))
+                    File.Create(fileLocation);
+                File.WriteAllTextAsync(fileLocation, ConstantsClass.LogText);
             }
-            LogsData.Text = "\n" + ConstantsClass.LogText;
-            Sleep();
+            if (ConstantsClass.TotalLine != ConstantsClass.ReadingLine)
+            {
+                button1.Enabled = true;
+                ExportDataBase.BackColor = Color.Red;
+                ExportDataBase.Enabled = false;
+            }
+            richTextBox1.Text = "\n" + ConstantsClass.LogText;
+            
         }
 
-        private async void Sleep()
+        private void Doing()
         {
-            await Task.Run(() => Thread.Sleep(3000));
+            richTextBox1.Text = "";
+            try
+            {
+                timer1.Enabled = true;
+                var execute = new Executioner();
+                execute.Execute(ConstantsClass.ExcelFilePath);
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = ConstantsClass.TotalLine;
+                ExportDataBase.BackColor = Color.Red;
+            }
+            catch
+            { 
+                ConstantsClass.LogText += "\n \"Some thing went Wrong\"\n";
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ConstantsClass.IsCancelled = true;
+            ConstantsClass.LogText += "\n Export Cancelled Manually\n";
+            ExportDataBase.Enabled = true; 
+        }
+
+        private void timer1_Tick_1(object sender, EventArgs e)
+        {
+            timer1_Tick(sender, e);
         }
     }
 }

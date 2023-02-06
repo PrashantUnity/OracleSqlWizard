@@ -7,6 +7,9 @@
         public static string SaveFileLocation{ get; set; }
         public static int ReadingLine { get; set; }
         public static int TotalLine { get; set; }
+        public static bool IsCancelled { get; set; } = false;
+
+        public static string JobsWithFailedStatus { get; set; } = "";
         public static bool EnableExecuteButton { get; internal set; }
 
         public static int IndexOfUsedId           { get; set; } = 0;

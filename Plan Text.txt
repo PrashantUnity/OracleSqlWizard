@@ -1,4 +1,7 @@
-﻿Step 1 : Locate/Browse Excel File
+﻿
+
+
+Step 1 : Locate/Browse Excel File
 Step 2 : Browse Back Up Location
 
 Make Sure Excel is in this Format below
@@ -17,3 +20,4 @@ userid	password	localhost.corp.pvt		1234        databaseName  ownerName     	tab
 Step 3 : Click on export and wait  for the progress bar to Finish
 
 You can view Activity in log tab
+you can view the log files in LogsFolder

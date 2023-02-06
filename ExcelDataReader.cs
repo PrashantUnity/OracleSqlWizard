@@ -32,7 +32,7 @@ namespace OracleSqlWizard
                             OwnerName.Add((reader.GetValue(5)).ToString()); 
                             ObjectType.Add($"'{(reader.GetValue(6)).ToString()}'");
 
-                            var tuple = ((UsedId[UsedId.Count-1] + OwnerName[OwnerName.Count-1]).ToUpper(), $"'{ObjectType[ObjectType.Count - 1].ToUpper()}'");
+                            var tuple = ((UsedId[UsedId.Count-1] + OwnerName[OwnerName.Count-1]).ToUpper(), ObjectType[ObjectType.Count - 1].ToUpper());
                             if (!storeObectList.ContainsKey(tuple))
                             {
                                 storeObectList.Add((tuple), new HashSet<string>());
@@ -41,6 +41,7 @@ namespace OracleSqlWizard
                         }
                         catch (Exception e)
                         {
+                            ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
                             ConstantsClass.LogText += $"\n Something is Wrong With Excel Data or {e.Message}";
                             string message = $"\n Something is Wrong With Excel Data or {e.Message}";
                             string title = "Invalid Excel Data";
@@ -49,6 +50,7 @@ namespace OracleSqlWizard
                             if (result == DialogResult.Yes)
                             {
                             }
+                            ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
                         }
                         rowCount++;
                     }
@@ -62,6 +64,7 @@ namespace OracleSqlWizard
             
             var ls = new List<List<string>>();
             #region Getting Some Path From User
+            ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
             ConstantsClass.LogText += $"\n Reading From Excel File{DateTime.Now}";
             #endregion
             ConstantsClass.LogText += $"\n {DataReader(path)}";
@@ -81,6 +84,7 @@ namespace OracleSqlWizard
             ls.Add(ObjectType);
 
             ConstantsClass.LogText += "\n Data Readed from Excel";
+            ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
             return ls;
         }
         internal Dictionary<(string, string), HashSet<string>> StoredObectList()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +27,9 @@ namespace OracleSqlWizard
             var connection = new Connection();
             count = login.Count();
             ConstantsClass.TotalLine = count;
-            while (++i < count)
+            ConstantsClass.IsCancelled = false;
+            ConstantsClass.JobsWithFailedStatus += $"\n\n _________________________________________________________";
+            while (++i < count && !ConstantsClass.IsCancelled)
             {
                 ConstantsClass.ReadingLine = i;
                 var ownerName = login.OwnerName(i);
@@ -45,8 +48,24 @@ namespace OracleSqlWizard
                     visited.Add(isVisited);
                 }
             }
-            ConstantsClass.ReadingLine = i;
+            ConstantsClass.ReadingLine = count;
+
+
+            if(ConstantsClass.JobsWithFailedStatus.Length>5)
+            {
+                var pathFailed = ConstantsClass.SaveFileLocation + "\\LogsFiles";
+                pathFailed = Directory.CreateDirectory(pathFailed).ToString();
+                pathFailed += $"\\Failed.txt";
+                if (!File.Exists(pathFailed))
+                {
+                    File.Create(pathFailed).Close();
+                }
+                ConstantsClass.JobsWithFailedStatus += $"\n {DateTime.Now}";
+                ConstantsClass.JobsWithFailedStatus += $"\n\n _________________________________________________________";
+                File.AppendAllTextAsync(pathFailed, ConstantsClass.JobsWithFailedStatus); 
+            }
             ConstantsClass.LogText += "\n Program Finished";
+            
             #endregion
 
             #region Write Data to Excel Sheet
