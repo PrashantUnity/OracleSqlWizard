@@ -13,8 +13,14 @@ namespace OracleSqlWizard
 
 
                 OracleConnection con = new();
-                ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------";
-                ConstantsClass.LogText += $"\n Logging Started for {userId} {DateTime.Now.ToString()}";
+                ConstantsClass.LogText += "\n\n";
+
+                ConstantsClass.LogText += $"\n***************************************************************";
+                ConstantsClass.LogText += $"\n Logging";
+                ConstantsClass.LogText += $"\n Start Time           :{DateTime.Now}";
+                ConstantsClass.LogText += $"\n User Id              :{userId} ";
+                ConstantsClass.LogText += $"\n Owner/Schema Name    :{ownerName} ";
+                
                 // create connection string using builder
                 OracleConnectionStringBuilder ocsb = new()
                 {
@@ -27,67 +33,76 @@ namespace OracleSqlWizard
                 con.ConnectionString = ocsb.ConnectionString;
                 Console.WriteLine(con.ConnectionTimeout);
                 con.Open();
-                ConstantsClass.LogText += $"\n Logged in with {userId}";
+                ConstantsClass.LogText += $"\n Successfully Login to : {userId}";
                 OracleCommand orclCmd = con.CreateCommand();
                 orclCmd.CommandTimeout = 1000000;
 
                 var path = Directory.GetCurrentDirectory();
                 
-                    foreach (var objectName in objectNameList)
+                foreach (var objectName in objectNameList)
+                {
+                    ConstantsClass.CurrentLine++;
+                    currentObjectName = objectName;
+                    query = $"select DBMS_METADATA.GET_DDL({objectType.ToUpper()},{objectName.ToUpper()}) from dual";
+                    orclCmd.CommandText = query;
+                    var rdr = orclCmd.ExecuteReader();
+                    while (rdr.Read())
                     {
-                        currentObjectName = objectName;
-                        query = $"select DBMS_METADATA.GET_DDL({objectType},{objectName}) from dual";
-                        orclCmd.CommandText = query;
-                        var rdr = orclCmd.ExecuteReader();
-                        while (rdr.Read())
-                        {
-                            CreateSqlFile(ownerName, rdr.GetString(0), userId, objectType, objectName, databaseName);
-                        }
-                        rdr.Close();
+                        CreateSqlFile(ownerName, rdr.GetString(0), userId, objectType, objectName, databaseName);
                     }
-                    orclCmd.Dispose();
-                    con.Close(); 
+                    rdr.Close();
+                }
+                orclCmd.Dispose();
+                con.Close(); 
 
 
-                ConstantsClass.LogText += $"\n Logging Out {userId} {DateTime.Now.ToString()}";
-                ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
+                ConstantsClass.LogText += $"\n Logging off from     :{userId}";
+                ConstantsClass.LogText += $"\n Time                 :{DateTime.Now}";
+                ConstantsClass.LogText += $"\n***************************************************************";
+                ConstantsClass.LogText += "\n\n";
+
             }
-            catch(OracleException e)
+            catch (OracleException e)
             {
-                ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
-                ConstantsClass.LogText += $"\n Something Went Wrong Possible Solutions \n" +
-                    $" Make Sure You Are Connected to VPN if It is Required" +
-                    $"\n Data is in Correct Excel Format" +
-                    $"\n*************************************************" +
-                    $"\n : Problem In This Credentials" +
-                    $"\n User Id-------------- :{userId}" +
-                    $"\n PassWord------------- :{password}" +
-                    $"\n Server--------------- :{databaseUrl}" +
-                    $"\n Port----------------- :{port}" +
-                    $"\n DataBase Name-------- :{databaseName}" +
-                    $"\n OwnerName/Schema Name :{ownerName}" +
-                    $"\n Object Type---------- :{objectType}" +
-                    $"\n Object Name---------- :{currentObjectName}" +
-                    $"\n*************************************************" +
-                    $"\n Hope You resolution get Resolved\n";
-                    ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
-                    ConstantsClass.LogText += $"\n Failed To Execute This Query : {query} \n"; 
-                    ConstantsClass.LogText += $"\n {e.ErrorCode} \n"; 
-                    ConstantsClass.LogText += $"\n {string.Join(" ",e.Errors)} \n"; 
-                    ConstantsClass.LogText += $"\n {query} \n"; 
-                    ConstantsClass.LogText += $"\n {query} \n"; 
-                    ConstantsClass.LogText += $"\n {query} \n"; 
-                    ConstantsClass.LogText += $"\n {query} \n"; 
-                    ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
+                ConstantsClass.LogText += "\n\n";
+
+                ConstantsClass.LogText +=
+                    $"\n******************************************************************" +
+                    $"\n*          Something went wrong !! \n                            *" +
+                    $"\n*          Possible solutions                                    *" +
+                    $"\n*          Make sure                                             *" +
+                    $"\n*                 1 : You sre connected to VPN                   *" +
+                    $"\n*                 2 : Data is in valid Format                    *" +
+                    $"\n******************************************************************" +
+                    $"\n*          Credentials Details                                   *" +
+                    $"\n*          User Id-------------- :{userId}                       *" +
+                    $"\n*          PassWord------------- :{password}                     *" +
+                    $"\n*          Server--------------- :{databaseUrl}                  *" +
+                    $"\n*          Port----------------- :{port}                         *" +
+                    $"\n*          DataBase Name-------- :{databaseName}                 *" +
+                    $"\n*          OwnerName/Schema Name :{ownerName}                    *" +
+                    $"\n*          Object Type---------- :{objectType}                   *" +
+                    $"\n*          Object Name---------- :{currentObjectName}            *" +
+                    $"\n******************************************************************" ;
+                ConstantsClass.LogText += "\n\n";
+                ConstantsClass.LogText +=
+                     $"\n*******************************************************************"
+                    +$"\n* Failed To Execute The Query                                     *"
+                    +$"\n* {query}                                                         *"
+                    +$"\n* {e.ErrorCode} \n                                                *"
+                    +$"\n* {e.Message} \n                                                  *"
+                    +$"\n* {string.Join(" ",e.Errors)} \n                                  *"
+                    +$"\n*******************************************************************";
+                ConstantsClass.LogText += "\n\n";
                 ConstantsClass.JobsWithFailedStatus +=
-                $"\n\t{userId}" +
-                $"\t{password}" +
-                $"\t{databaseUrl}" +
-                $"\t{port}" +
-                $"\t{databaseName}" +
-                $"\t{ownerName}" +
-                $"\t{objectType}" +
-                $"\t{currentObjectName}\n";
+                      $"\n{userId}"                                                          
+                     +$"\t{password}"                                                        
+                     +$"\t{databaseUrl}"                                                     
+                     +$"\t{port}"                                                            
+                     +$"\t{databaseName}"                                                    
+                     +$"\t{ownerName}"                                                       
+                     +$"\t{objectType}"                                                      
+                     +$"\t{currentObjectName}";
             }
         }
         public void CreateSqlFile(string ownerName, string queryString, string owner, string objectType, string objectName, string databaseName)
@@ -102,20 +117,28 @@ namespace OracleSqlWizard
             path += $"\\{objectType}";
             path = Directory.CreateDirectory(path).ToString();
             path += $"\\{objectName}.sql";
-            ConstantsClass.LogText += $"\n  creating Path {path}";
+            ConstantsClass.LogText += "\n\n";
+
+            ConstantsClass.LogText += 
+                  $"\n*******************************************************************"
+                + $"\n*Creating Path {path}"
+                +$"\n*******************************************************************";
             File.Create(path).Close();
             File.WriteAllTextAsync(path, queryString);
-            ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
-            ConstantsClass.LogText += $"\n writing query in {objectName}.sql File at location {path}";
-            ConstantsClass.LogText += $"\n\n\n" +
-                $"***************Folder Structure**************\n" +
-                $"{databaseName}                               \n" +
-                $"-----{ownerName}                             \n" +
-                $"--------{owner}                              \n" +
-                $"-----------{objectType}                      \n" +
-                $"---------------{objectName}                  \n" +
-                $"*********************************************\n";
-            ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
+            ConstantsClass.LogText += "\n\n";
+
+            ConstantsClass.LogText +=
+                  $"\n*******************************************************************"+  
+                  $"\n Writing query in :{objectName}.sql" +
+                  $"\n File location    :{path}" +
+                  $"\n*************Folder Structure**************************************" +
+                  $"\n*{databaseName}                                                   " +
+                  $"\n*-----{ownerName}                                                 " +
+                  $"\n*--------{owner}                                                  " +
+                  $"\n*-----------{objectType}                                          " +
+                  $"\n*---------------{objectName}                                      " +
+                  $"\n*******************************************************************";
+            ConstantsClass.LogText += "\n\n";
         }
     }
 }

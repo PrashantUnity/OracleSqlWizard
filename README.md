@@ -1,4 +1,4 @@
-# OracleSqlWizard app Name
+# App Name
 
 ## MetaBackup Oracle 
 

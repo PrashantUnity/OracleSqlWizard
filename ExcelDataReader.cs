@@ -56,7 +56,7 @@ namespace OracleSqlWizard
                     }
                 }
             }
-            return $"Number Row Counted {rowCount}";
+            return $"{rowCount}";
         }
 
         internal List<List<string>> GetCrediantials(string path)
@@ -64,10 +64,12 @@ namespace OracleSqlWizard
             
             var ls = new List<List<string>>();
             #region Getting Some Path From User
-            ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
-            ConstantsClass.LogText += $"\n Reading From Excel File{DateTime.Now}";
+            ConstantsClass.LogText += "\n\n";
+            ConstantsClass.LogText += $"\n***************************************************************";
+            ConstantsClass.LogText += $"\n Reading from input file ";
+            ConstantsClass.LogText += $"\n Start Time : {DateTime.Now}";
             #endregion
-            ConstantsClass.LogText += $"\n {DataReader(path)}";
+            ConstantsClass.LogText += $"\n Row Count  : {DataReader(path)}";
             ConstantsClass.IndexOfUsedId = 0;
             ls.Add(UsedId);
             ConstantsClass.IndexOfPassword = 1;
@@ -83,8 +85,11 @@ namespace OracleSqlWizard
             ConstantsClass.IndexOfObjectType = 6;
             ls.Add(ObjectType);
 
-            ConstantsClass.LogText += "\n Data Readed from Excel";
-            ConstantsClass.LogText += $"\n\n\n ------------------------------------------------------------\n";
+            ConstantsClass.LogText += $"\n Reading completed";
+            ConstantsClass.LogText += $"\n End Time : {DateTime.Now}";
+            ConstantsClass.LogText += $"\n***************************************************************\n";
+            ConstantsClass.LogText += "\n\n";
+
             return ls;
         }
         internal Dictionary<(string, string), HashSet<string>> StoredObectList()

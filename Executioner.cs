@@ -28,10 +28,11 @@ namespace OracleSqlWizard
             count = login.Count();
             ConstantsClass.TotalLine = count;
             ConstantsClass.IsCancelled = false;
-            ConstantsClass.JobsWithFailedStatus += $"\n\n _________________________________________________________";
+            ConstantsClass.JobsWithFailedStatus +=
+                $"\n***************************************************************";
             while (++i < count && !ConstantsClass.IsCancelled)
             {
-                ConstantsClass.ReadingLine = i;
+                //ConstantsClass.ReadingLine = i;
                 var ownerName = login.OwnerName(i);
                 var userId = login.UserId(i);
                 var password = login.PassWord(i);
@@ -43,15 +44,16 @@ namespace OracleSqlWizard
                 var isVisited = (userId, objectType);
                 if (!visited.Contains((isVisited)))
                 {
-                    ConstantsClass.LogText += $"\n Logging with Owner {ownerName} with User Id : {userId}";
                     connection.Connect(ownerName,userId, password, port, localHost, dataBaseName, objectType, storesList);
                     visited.Add(isVisited);
                 }
+
             }
             ConstantsClass.ReadingLine = count;
+            ConstantsClass.CurrentLine = count;
 
 
-            if(ConstantsClass.JobsWithFailedStatus.Length>5)
+            if (ConstantsClass.JobsWithFailedStatus.Length>5)
             {
                 var pathFailed = ConstantsClass.SaveFileLocation + "\\LogsFiles";
                 pathFailed = Directory.CreateDirectory(pathFailed).ToString();
@@ -60,12 +62,23 @@ namespace OracleSqlWizard
                 {
                     File.Create(pathFailed).Close();
                 }
-                ConstantsClass.JobsWithFailedStatus += $"\n {DateTime.Now}";
-                ConstantsClass.JobsWithFailedStatus += $"\n\n _________________________________________________________";
+                ConstantsClass.JobsWithFailedStatus += $"\n Time {DateTime.Now}";
+                ConstantsClass.JobsWithFailedStatus += 
+                    $"\n***************************************************************";
                 File.AppendAllTextAsync(pathFailed, ConstantsClass.JobsWithFailedStatus); 
             }
-            ConstantsClass.LogText += "\n Program Finished";
-            
+            if (!ConstantsClass.IsCancelled)
+            {
+                ConstantsClass.LogText += $"\n***************************************************************"; ;
+                ConstantsClass.LogText += "\n                        Program ended successfully";
+                ConstantsClass.LogText += $"\n***************************************************************"; ;
+                ConstantsClass.LogText += $"\n==============================================================="; ;
+            }
+            else
+            {
+                ConstantsClass.LogText += "\n Program Cancelled";
+            }
+
             #endregion
 
             #region Write Data to Excel Sheet

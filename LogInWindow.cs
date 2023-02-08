@@ -104,13 +104,15 @@ namespace OracleSqlWizard
         private async void ExportDataBase_Click(object sender, EventArgs e)
         {
             ConstantsClass.IsCancelled = false;
+            ConstantsClass.CurrentLine = 0;
+            ConstantsClass.ReadingLine = 0;
             timer1.Enabled = true;
             await Task.Factory.StartNew(() => Doing()); 
             ExportDataBase.Enabled = false;
         }   
         private void timer1_Tick(object sender, EventArgs e)
         {
-            progressBar1.Value = ConstantsClass.ReadingLine;
+            progressBar1.Value = ConstantsClass.CurrentLine;
             if (ConstantsClass.TotalLine == ConstantsClass.ReadingLine)
             {
                 ExportDataBase.BackColor = Color.Green;
@@ -120,9 +122,9 @@ namespace OracleSqlWizard
                 var fileLocation = ConstantsClass.SaveFileLocation + "\\LogsFiles";
                 fileLocation = Directory.CreateDirectory(fileLocation).ToString();
                 fileLocation += "\\Log.txt";
-                if (!File.Exists(fileLocation))
-                    File.Create(fileLocation);
-                File.WriteAllTextAsync(fileLocation, ConstantsClass.LogText);
+                if (!File.Exists(fileLocation)) 
+                    File.Create(fileLocation); 
+                File.AppendAllTextAsync(fileLocation, ConstantsClass.LogText); 
             }
             if (ConstantsClass.TotalLine != ConstantsClass.ReadingLine)
             {
@@ -155,7 +157,9 @@ namespace OracleSqlWizard
         private void button1_Click(object sender, EventArgs e)
         {
             ConstantsClass.IsCancelled = true;
-            ConstantsClass.LogText += "\n Export Cancelled Manually\n";
+            ConstantsClass.LogText += $"\n***************************************************************";
+            ConstantsClass.LogText += $"\n*            Export Cancelled Manually                        *";
+            ConstantsClass.LogText += $"\n***************************************************************";
             ExportDataBase.Enabled = true; 
         }
 
