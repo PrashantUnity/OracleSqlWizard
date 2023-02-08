@@ -1,6 +1,5 @@
-# App Name
 
-## Oracle MetaBackup 
+# Oracle MetaBackup 
 
  
 *Oracle MetaBackup  is a powerful and efficient app 
