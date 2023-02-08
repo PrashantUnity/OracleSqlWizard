@@ -2,7 +2,7 @@
 
 ## Oracle MetaBackup 
 
-Description 
+ 
 *Oracle MetaBackup  is a powerful and efficient app 
 that creates a backup of your Oracle SQL file metadata. 
 It ensures the safety and security of your data by 
